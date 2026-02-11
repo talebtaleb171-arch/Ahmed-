@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
