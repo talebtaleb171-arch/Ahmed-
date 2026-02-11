@@ -9,8 +9,8 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  title: "صندوق أحمد - إدارة الصناديق",
-  description: "نظام إدارة الصناديق الرئيسي والفرعي",
+  title: "Ahmed BMS - إدارة الصناديق",
+  description: "نظام إدارة الصناديق والعمليات المتكامل",
 };
 
 export default function RootLayout({

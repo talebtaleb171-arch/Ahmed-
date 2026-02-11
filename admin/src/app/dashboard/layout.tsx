@@ -26,8 +26,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
             <aside className="w-64 bg-blue-900 text-white flex flex-col">
-                <div className="p-6 text-2xl font-bold border-b border-blue-800">
-                    صندوق أحمد
+                <div className="p-6 flex justify-center border-b border-blue-800">
+                    <img src="/logo.png" alt="Ahmed BMS Logo" className="h-20 w-auto" />
                 </div>
                 <nav className="flex-1 mt-6">
                     {menuItems.map((item) => (
