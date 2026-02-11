@@ -19,17 +19,48 @@ class TransactionController extends Controller
 
     public function index(Request $request)
     {
-        $query = Transaction::with(['cashBox', 'creator', 'media']);
+        $query = Transaction::with(['cashBox', 'creator', 'media', 'withdrawalType']);
 
         if ($request->has('cashbox_id')) {
             $query->where('cashbox_id', $request->cashbox_id);
+        }
+
+        if ($request->filled('from_date')) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('created_at', '<=', $request->to_date);
         }
 
         if ($request->user()->role !== 'admin') {
             $query->where('created_by', $request->user()->id);
         }
 
+        if ($request->has('no_paginate')) {
+            return response()->json(['data' => $query->latest()->get()]);
+        }
+
         return response()->json($query->latest()->paginate(20));
+    }
+
+    public function stats(Request $request)
+    {
+        $query = Transaction::query();
+        if ($request->user()->role !== 'admin') {
+            $query->where('created_by', $request->user()->id);
+        }
+
+        $pending = (clone $query)->where('status', 'pending')->count();
+        $approved = (clone $query)->where('status', 'approved')->count();
+        $rejected = (clone $query)->where('status', 'rejected')->count();
+
+        return response()->json([
+            'pending' => $pending,
+            'approved' => $approved,
+            'rejected' => $rejected,
+            'total' => $pending + $approved + $rejected
+        ]);
     }
 
     public function store(Request $request)
@@ -40,6 +71,10 @@ class TransactionController extends Controller
             'amount' => 'required|numeric|min:0.01',
             'images' => 'required|array|min:1',
             'images.*' => 'image|max:5120', // 5MB max
+            'withdrawal_type_id' => 'nullable|exists:withdrawal_types,id',
+            'account_number' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:255',
+            'notes' => 'nullable|string',
         ]);
 
         $transaction = Transaction::create([
@@ -50,6 +85,10 @@ class TransactionController extends Controller
             'balance_after' => 0,  // Will be set on approval
             'status' => 'pending',
             'created_by' => $request->user()->id,
+            'withdrawal_type_id' => $request->withdrawal_type_id,
+            'account_number' => $request->account_number,
+            'phone_number' => $request->phone_number,
+            'notes' => $request->notes,
         ]);
 
         if ($request->hasFile('images')) {
@@ -63,6 +102,41 @@ class TransactionController extends Controller
         }
 
         return response()->json($transaction->load('media'), 201);
+    }
+
+    public function update(Request $request, Transaction $transaction)
+    {
+        if ($transaction->status !== 'pending') {
+            return response()->json(['message' => 'يمكن تعديل العمليات المعلقة فقط'], 422);
+        }
+
+        $request->validate([
+            'amount' => 'sometimes|numeric|min:0.01',
+            'withdrawal_type_id' => 'nullable|exists:withdrawal_types,id',
+            'account_number' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:255',
+            'notes' => 'nullable|string',
+        ]);
+
+        $transaction->update($request->only([
+            'amount',
+            'withdrawal_type_id',
+            'account_number',
+            'phone_number',
+            'notes'
+        ]));
+
+        return response()->json($transaction->load('withdrawalType'));
+    }
+
+    public function destroy(Transaction $transaction)
+    {
+        if ($transaction->status !== 'pending' && auth()->user()->role !== 'admin') {
+            return response()->json(['message' => 'لا يمكن حذف العمليات المعتمدة إلا من قبل المسؤول'], 403);
+        }
+
+        $transaction->delete(); // This triggers soft delete
+        return response()->json(['message' => 'تم حذف العملية بنجاح']);
     }
 
     public function approve(Transaction $transaction, Request $request)

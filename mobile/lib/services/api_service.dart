@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://10.0.2.2:8000/api'; // Standard Android Emulator local address
+  static const String baseUrl = 'http://127.0.0.1:8000/api'; 
 
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -35,7 +35,7 @@ class ApiService {
   Future<http.StreamedResponse> postWithImages(
     String endpoint, 
     Map<String, String> fields, 
-    List<File> images
+    List<XFile> images
   ) async {
     final url = Uri.parse('$baseUrl$endpoint');
     final token = await _getToken();
@@ -49,7 +49,12 @@ class ApiService {
     request.fields.addAll(fields);
 
     for (var image in images) {
-      final multipartFile = await http.MultipartFile.fromPath('images[]', image.path);
+      final bytes = await image.readAsBytes();
+      final multipartFile = http.MultipartFile.fromBytes(
+        'images[]', 
+        bytes,
+        filename: image.name,
+      );
       request.files.add(multipartFile);
     }
 

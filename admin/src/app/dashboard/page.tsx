@@ -11,19 +11,19 @@ export default function DashboardPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [boxesRes, transRes] = await Promise.all([
+                const [boxesRes, statsRes] = await Promise.all([
                     api.get('/cashboxes'),
-                    api.get('/transactions')
+                    api.get('/transactions/stats')
                 ]);
 
                 const boxes = boxesRes.data;
                 const mainBox = boxes.find((b: any) => b.type === 'main');
-                const transactions = transRes.data.data;
+                const statsData = statsRes.data;
 
                 setStats({
                     mainBalance: mainBox?.balance || 0,
-                    subBoxesCount: boxes.length - 1,
-                    pendingTransactions: transactions.filter((t: any) => t.status === 'pending').length,
+                    subBoxesCount: boxes.filter((b: any) => b.type === 'sub').length,
+                    pendingTransactions: statsData.pending,
                     totalSubBalance: boxes.filter((b: any) => b.type === 'sub').reduce((acc: number, b: any) => acc + parseFloat(b.balance), 0),
                 });
             } catch (err) {
@@ -38,8 +38,8 @@ export default function DashboardPage() {
     if (loading) return <div>جاري التحميل...</div>;
 
     const cards = [
-        { name: 'رصيد الصندوق الرئيسي', value: `${stats.mainBalance} د.ج`, icon: Wallet, color: 'bg-blue-500' },
-        { name: 'إجمالي أرصدة الوكلاء', value: `${stats.totalSubBalance} د.ج`, icon: ArrowUpCircle, color: 'bg-green-500' },
+        { name: 'رصيد الصندوق الرئيسي', value: `${stats.mainBalance} MRU`, icon: Wallet, color: 'bg-blue-500' },
+        { name: 'إجمالي أرصدة الوكلاء', value: `${stats.totalSubBalance} MRU`, icon: ArrowUpCircle, color: 'bg-green-500' },
         { name: 'عدد الصناديق الفرعية', value: stats.subBoxesCount, icon: Clock, color: 'bg-purple-500' },
         { name: 'عمليات بانتظار الموافقة', value: stats.pendingTransactions, icon: Clock, color: 'bg-yellow-500' },
     ];

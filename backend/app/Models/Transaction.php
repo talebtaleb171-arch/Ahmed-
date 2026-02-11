@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'cashbox_id',
         'type',
@@ -16,11 +18,20 @@ class Transaction extends Model
         'reason',
         'created_by',
         'approved_by',
+        'withdrawal_type_id',
+        'account_number',
+        'phone_number',
+        'notes',
     ];
+
+    public function withdrawalType()
+    {
+        return $this->belongsTo(WithdrawalType::class);
+    }
 
     public function cashBox()
     {
-        return $this->belongsTo(CashBox::class);
+        return $this->belongsTo(CashBox::class, 'cashbox_id');
     }
 
     public function creator()

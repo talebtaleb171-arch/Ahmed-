@@ -1,0 +1,35 @@
+Analyzing mobile...                                             
+
+  error - The argument type 'CardTheme' can't be assigned to the parameter type 'CardThemeData?'.  - lib\main.dart:47:20 - argument_type_not_assignable
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\main.dart:51:49 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\screens\admin\admin_dashboard.dart:20:36 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\screens\admin\admin_dashboard.dart:21:40 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\admin_dashboard.dart:40:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\admin_dashboard.dart:79:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\admin_dashboard.dart:82:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\admin_dashboard.dart:93:89 - deprecated_member_use
+  error - The getter 'black' isn't defined for the type 'FontWeight' - lib\screens\admin\admin_dashboard.dart:131:56 - undefined_getter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\admin_dashboard.dart:170:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\admin_dashboard.dart:177:76 - deprecated_member_use
+  error - The getter 'black' isn't defined for the type 'FontWeight' - lib\screens\admin\admin_dashboard.dart:215:56 - undefined_getter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\admin_dashboard.dart:259:36 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\screens\admin\admin_dashboard.dart:321:36 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\admin_dashboard.dart:361:22 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\screens\agent\agent_dashboard.dart:21:36 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\screens\agent\agent_dashboard.dart:22:40 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\agent_dashboard.dart:40:33 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\screens\agent\agent_dashboard.dart:53:50 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\agent_dashboard.dart:74:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\agent_dashboard.dart:106:49 - deprecated_member_use
+  error - The getter 'black' isn't defined for the type 'FontWeight' - lib\screens\agent\agent_dashboard.dart:129:52 - undefined_getter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\agent_dashboard.dart:173:83 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\agent_dashboard.dart:197:63 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\agent_dashboard.dart:204:78 - deprecated_member_use
+  error - The getter 'black' isn't defined for the type 'FontWeight' - lib\screens\agent\agent_dashboard.dart:242:58 - undefined_getter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\new_transaction_screen.dart:92:36 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\new_transaction_screen.dart:127:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\new_transaction_screen.dart:131:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\new_transaction_screen.dart:164:58 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\new_transaction_screen.dart:167:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\agent\new_transaction_screen.dart:257:35 - deprecated_member_use
+

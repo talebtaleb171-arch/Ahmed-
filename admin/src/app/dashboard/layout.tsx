@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
-import { LayoutDashboard, Wallet, History, LogOut, Users } from 'lucide-react';
+import { LayoutDashboard, Wallet, History, LogOut, Users, Settings, FileText } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -17,7 +17,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         { name: 'الرئيسية', icon: LayoutDashboard, href: '/dashboard' },
         { name: 'الصناديق', icon: Wallet, href: '/dashboard/cashboxes' },
         { name: 'العمليات', icon: History, href: '/dashboard/transactions' },
-        { name: 'المستخدمين', icon: Users, href: '/dashboard/users' },
+        { name: 'الوكلاء', icon: Users, href: '/dashboard/users' },
+        { name: 'أنواع السحوبات', icon: Settings, href: '/dashboard/withdrawal-types' },
+        { name: 'التقارير', icon: FileText, href: '/dashboard/reports' },
     ];
 
     return (

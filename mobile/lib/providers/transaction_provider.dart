@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../services/api_service.dart';
 
 class TransactionProvider with ChangeNotifier {
@@ -11,12 +11,15 @@ class TransactionProvider with ChangeNotifier {
   List<dynamic> get transactions => _transactions;
   bool get isLoading => _isLoading;
 
-  Future<void> fetchTransactions({int? cashboxId}) async {
+  Future<void> fetchTransactions({int? cashboxId, String? status}) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      final endpoint = cashboxId != null ? '/transactions?cashbox_id=$cashboxId' : '/transactions';
+      String endpoint = '/transactions?';
+      if (cashboxId != null) endpoint += 'cashbox_id=$cashboxId&';
+      if (status != null) endpoint += 'status=$status';
+      
       final response = await _apiService.get(endpoint);
 
       if (response.statusCode == 200) {
@@ -35,7 +38,7 @@ class TransactionProvider with ChangeNotifier {
     required int cashboxId,
     required String type,
     required double amount,
-    required List<File> images,
+    required List<XFile> images,
   }) async {
     _isLoading = true;
     notifyListeners();
