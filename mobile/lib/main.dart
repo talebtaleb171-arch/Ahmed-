@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Caisse Ahmed',
+      title: 'Ahmed BMS',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           bodyLarge: GoogleFonts.cairo(color: const Color(0xFF475569)),
           bodyMedium: GoogleFonts.cairo(color: const Color(0xFF64748B)),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
