@@ -25,15 +25,6 @@ Route::get('/init-db', function () {
     }
 });
 
-Route::get('/debug-db', function () {
-    try {
-        $tables = \Illuminate\Support\Facades\DB::select("SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public'");
-        return response()->json($tables);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
-    }
-});
-
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
