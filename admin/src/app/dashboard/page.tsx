@@ -15,13 +15,13 @@ const useDashboard = () => {
                 const [boxesRes, statsRes, transactionsRes] = await Promise.all([
                     api.get('/cashboxes'),
                     api.get('/transactions/stats'),
-                    api.get('/transactions?limit=5')
+                    api.get('/transactions?no_paginate=1&limit=5')
                 ]);
 
                 const boxes = boxesRes.data;
                 const mainBox = boxes.find((b: any) => b.type === 'main');
                 const statsData = statsRes.data;
-                const transactionsData = transactionsRes.data;
+                const transactionsData = transactionsRes.data?.data || transactionsRes.data || [];
 
                 setStats({
                     mainBalance: mainBox?.balance || 0,
@@ -32,7 +32,7 @@ const useDashboard = () => {
                     total_balance: boxes.reduce((acc: number, b: any) => acc + parseFloat(b.balance), 0),
                     daily_transactions: transactionsData.length,
                 });
-                setRecentTransactions(transactionsData);
+                setRecentTransactions(Array.isArray(transactionsData) ? transactionsData.slice(0, 5) : []);
             } catch (err) {
                 console.error(err);
             } finally {
@@ -96,21 +96,21 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <StatCard
                     title="عدد الصناديق"
-                    value={stats.cashboxes_count}
+                    value={stats?.cashboxes_count ?? 0}
                     icon={Wallet}
                     color="bg-indigo-600"
                     trend="+2 هذا الشهر"
                 />
                 <StatCard
                     title="الرصيد الإجمالي"
-                    value={`${stats.total_balance} MRU`}
+                    value={`${stats?.total_balance ?? 0} MRU`}
                     icon={CreditCard}
                     color="bg-emerald-600"
                     trend="مستقر"
                 />
                 <StatCard
                     title="العمليات اليومية"
-                    value={stats.daily_transactions}
+                    value={stats?.daily_transactions ?? 0}
                     icon={ArrowUpRight}
                     color="bg-amber-600"
                     trend="+15%"
