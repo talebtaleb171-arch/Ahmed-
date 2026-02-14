@@ -14,9 +14,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (!user) return null; // Controlled by AuthProvider/Midleware logically
 
     const menuItems = [
-        { name: 'الرئيسية', icon: LayoutDashboard, href: '/dashboard' },
-        { name: 'الصناديق', icon: Wallet, href: '/dashboard/cashboxes' },
-        { name: 'العمليات', icon: History, href: '/dashboard/transactions' },
         { text: 'الرئيسية', icon: LayoutDashboard, href: '/dashboard' },
         { text: 'الصناديق', icon: Wallet, href: '/dashboard/cashboxes' },
         { text: 'العمليات', icon: History, href: '/dashboard/transactions' },
