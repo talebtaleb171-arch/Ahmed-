@@ -25,57 +25,68 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-900 to-blue-700">
-            <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
+        <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 mesh-bg">
+            <div className="max-w-md w-full glass-card p-10 rounded-3xl animate-in fade-in zoom-in duration-500">
                 <div className="flex flex-col items-center">
-                    <img src="/logo.png" alt="Ahmed BMS Logo" className="h-32 w-auto mb-4" />
-                    <h2 className="text-center text-3xl font-extrabold text-blue-900">
-                        Ahmed BMS
+                    <div className="bg-white/10 p-4 rounded-2xl mb-6">
+                        <img src="/logo.png" alt="Ahmed BMS Logo" className="h-28 w-auto" />
+                    </div>
+                    <h2 className="text-center text-4xl font-extrabold text-white tracking-tight">
+                        Ahmed <span className="text-indigo-400">BMS</span>
                     </h2>
-                    <p className="mt-2 text-center text-sm text-gray-600">
-                        سجل الدخول لإدارة الصناديق والعمليات
+                    <p className="mt-4 text-center text-sm text-gray-300 font-medium">
+                        لوحة التحكم الرئيسية للمسؤولين
                     </p>
                 </div>
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+                <form className="mt-10 space-y-6" onSubmit={handleSubmit}>
                     {error && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                        <div className="bg-red-500/10 border border-red-500/20 text-red-200 px-4 py-3 rounded-xl text-sm text-center">
                             {error}
                         </div>
                     )}
-                    <div className="rounded-md shadow-sm -space-y-px">
-                        <div>
+                    <div className="space-y-4">
+                        <div className="space-y-1">
+                            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mr-1">البريد الإلكتروني</label>
                             <input
                                 type="email"
                                 required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                                placeholder="البريد الإلكتروني"
+                                className="block w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
+                                placeholder="admin@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
-                        <div>
+                        <div className="space-y-1">
+                            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mr-1">كلمة المرور</label>
                             <input
                                 type="password"
                                 required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                                placeholder="كلمة المرور"
+                                className="block w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
+                                placeholder="••••••••"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
                     </div>
 
-                    <div>
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-                        >
-                            {isLoading ? 'جاري التحميل...' : 'دخول'}
-                        </button>
-                    </div>
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="group relative w-full flex justify-center py-4 px-4 border border-transparent font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all shadow-lg shadow-indigo-500/25 active:scale-95 disabled:opacity-50 disabled:active:scale-100"
+                    >
+                        {isLoading ? (
+                            <div className="flex items-center">
+                                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white ml-2"></span>
+                                جاري التحميل...
+                            </div>
+                        ) : 'دخول للنظام'}
+                    </button>
+
+                    <p className="text-center text-xs text-gray-500 mt-8">
+                        جميع الحقوق محفوظة © {new Date().getFullYear()} Ahmed BMS
+                    </p>
                 </form>
             </div>
-        </div >
+        </div>
     );
 }

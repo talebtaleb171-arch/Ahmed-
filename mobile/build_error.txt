@@ -1,0 +1,76 @@
+lib/screens/agent/agent_dashboard.dart:369:5: Error: Expected a class member, but got ')'.
+Running Gradle task 'assembleRelease'...                        
+    );
+    ^
+lib/screens/agent/agent_dashboard.dart:369:6: Error: Expected a class member, but got ';'.
+    );
+     ^
+lib/screens/agent/agent_dashboard.dart:406:1: Error: Expected a declaration, but got '}'.
+}
+^
+lib/main.dart:63:40: Error: Cannot invoke a non-'const' constructor where a const expression is expected.
+Try using a constructor or factory that is 'const'.
+            borderRadius: BorderRadius.circular(24),
+                                       ^^^^^^^^
+lib/main.dart:64:61: Error: Method invocation is not a constant expression.
+            side: BorderSide(color: const Color(0xFFE2E8F0).withOpacity(0.5)),
+                                                            ^^^^^^^^^^^
+lib/main.dart:60:26: Error: The argument type 'CardTheme' can't be assigned to the parameter type 'CardThemeData?'.
+ - 'CardTheme' is from 'package:flutter/src/material/card_theme.dart' ('/C:/flutter_windows_3.29.2-stable/flutter/packages/flutter/lib/src/material/card_theme.dart').
+ - 'CardThemeData' is from 'package:flutter/src/material/card_theme.dart' ('/C:/flutter_windows_3.29.2-stable/flutter/packages/flutter/lib/src/material/card_theme.dart').
+        cardTheme: const CardTheme(
+                         ^
+lib/screens/auth/login_screen.dart:80:30: Error: The getter 'GoogleFonts' isn't defined for the type '_LoginScreenState'.
+ - '_LoginScreenState' is from 'package:mobile/screens/auth/login_screen.dart' ('lib/screens/auth/login_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'GoogleFonts'.
+                      style: GoogleFonts.outfit(
+                             ^^^^^^^^^^^
+lib/screens/auth/login_screen.dart:90:30: Error: The getter 'GoogleFonts' isn't defined for the type '_LoginScreenState'.
+ - '_LoginScreenState' is from 'package:mobile/screens/auth/login_screen.dart' ('lib/screens/auth/login_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'GoogleFonts'.
+                      style: GoogleFonts.cairo(
+                             ^^^^^^^^^^^
+lib/screens/auth/login_screen.dart:118:42: Error: The getter 'GoogleFonts' isn't defined for the type '_LoginScreenState'.
+ - '_LoginScreenState' is from 'package:mobile/screens/auth/login_screen.dart' ('lib/screens/auth/login_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'GoogleFonts'.
+                                  style: GoogleFonts.cairo(
+                                         ^^^^^^^^^^^
+lib/screens/auth/login_screen.dart:170:50: Error: The getter 'GoogleFonts' isn't defined for the type '_LoginScreenState'.
+ - '_LoginScreenState' is from 'package:mobile/screens/auth/login_screen.dart' ('lib/screens/auth/login_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'GoogleFonts'.
+                                          style: GoogleFonts.cairo(
+                                                 ^^^^^^^^^^^
+lib/screens/auth/login_screen.dart:205:18: Error: The getter 'GoogleFonts' isn't defined for the type '_LoginScreenState'.
+ - '_LoginScreenState' is from 'package:mobile/screens/auth/login_screen.dart' ('lib/screens/auth/login_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'GoogleFonts'.
+          style: GoogleFonts.cairo(
+                 ^^^^^^^^^^^
+lib/screens/auth/login_screen.dart:234:25: Error: The getter 'GoogleFonts' isn't defined for the type '_LoginScreenState'.
+ - '_LoginScreenState' is from 'package:mobile/screens/auth/login_screen.dart' ('lib/screens/auth/login_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'GoogleFonts'.
+            errorStyle: GoogleFonts.cairo(color: Colors.redAccent.shade100, fontSize: 12),
+                        ^^^^^^^^^^^
+lib/screens/agent/agent_dashboard.dart:357:11: Error: No named parameter with the name 'shadowColor'.
+          shadowColor: const Color(0xFF6366F1).withOpacity(0.5),
+          ^^^^^^^^^^^
+/C:/flutter_windows_3.29.2-stable/flutter/packages/flutter/lib/src/material/floating_action_button.dart:218:9: Context: Found this candidate, but the arguments don't match.
+  const FloatingActionButton.extended({
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Target kernel_snapshot_program failed: Exception
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileFlutterBuildRelease'.
+> Process 'command 'C:\flutter_windows_3.29.2-stable\flutter\bin\flutter.bat'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 39s
+Running Gradle task 'assembleRelease'...                           40.3s
+Gradle task assembleRelease failed with exit code 1

@@ -108,19 +108,22 @@ export default function CashBoxesPage() {
     const subBoxes = cashBoxes.filter(b => b.type !== 'main');
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h2 className="text-xl font-bold text-gray-800">إدارة الصناديق</h2>
-                <div className="flex space-x-3 space-x-reverse">
+        <div className="space-y-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <h2 className="text-5xl font-black text-slate-900 tracking-tighter">إدارة الصناديق</h2>
+                    <p className="text-slate-500 mt-3 text-lg font-medium">إدارة الصناديق الرئيسية والفرعية وتوزيع المهام</p>
+                </div>
+                <div className="flex space-x-4 space-x-reverse">
                     {mainBox && (
-                        <div className="bg-blue-50 px-4 py-2 rounded-lg border border-blue-100 flex items-center">
-                            <span className="text-sm text-blue-800 ml-2">رصيد الرئيسي:</span>
-                            <span className="font-bold text-blue-900">{mainBox.balance} MRU</span>
+                        <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-100 flex items-center">
+                            <span className="text-sm font-bold text-gray-500 ml-3 uppercase tracking-wider">رصيد الرئيسي:</span>
+                            <span className="font-black text-xl text-indigo-600 tracking-tight">{mainBox.balance} MRU</span>
                         </div>
                     )}
                     <button
                         onClick={() => setShowModal(true)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-700 transition-colors"
+                        className="premium-gradient text-white px-8 py-3 rounded-2xl shadow-xl shadow-indigo-500/20 font-bold hover:opacity-90 transition-all flex items-center"
                     >
                         <Plus className="ml-2 h-5 w-5" />
                         إضافة صندوق جديد
@@ -128,45 +131,51 @@ export default function CashBoxesPage() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {/* Main Box Card */}
                 {mainBox && (
-                    <div key={mainBox.id} className="bg-gradient-to-br from-blue-900 to-blue-800 rounded-xl shadow-lg p-6 text-white relative group">
-                        <div className="absolute top-4 left-4 flex space-x-2 space-x-reverse opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div key={mainBox.id} className="premium-gradient rounded-[2.5rem] shadow-2xl p-10 text-white relative group overflow-hidden border border-white/5">
+                        {/* Decorative background element */}
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+
+                        <div className="absolute top-6 left-6 flex space-x-3 space-x-reverse opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                             <button
                                 onClick={() => { setSelectedBox(mainBox); setFundType('deposit'); setShowFundModal(true); }}
-                                className="bg-green-500/20 text-green-300 p-2 rounded-lg hover:bg-green-500/40"
+                                className="bg-white/10 backdrop-blur-md text-white p-3 rounded-2xl hover:bg-white/20 border border-white/10 transition-colors"
                                 title="تعبئة (إيداع)"
                             >
-                                <ArrowUpCircle className="h-5 w-5" />
+                                <ArrowUpCircle className="h-6 w-6" />
                             </button>
                             <button
                                 onClick={() => { setSelectedBox(mainBox); setFundType('withdrawal'); setShowFundModal(true); }}
-                                className="bg-red-500/20 text-red-300 p-2 rounded-lg hover:bg-red-500/40"
+                                className="bg-white/10 backdrop-blur-md text-white p-3 rounded-2xl hover:bg-white/20 border border-white/10 transition-colors"
                                 title="سحب خارجي"
                             >
-                                <ArrowDownCircle className="h-5 w-5" />
+                                <ArrowDownCircle className="h-6 w-6" />
                             </button>
                         </div>
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center space-x-4 space-x-reverse">
-                                <div className="bg-blue-700/50 p-3 rounded-full">
-                                    <Wallet className="h-6 w-6" />
+                        <div className="flex items-center justify-between mb-10 relative">
+                            <div className="flex items-center space-x-5 space-x-reverse">
+                                <div className="bg-white/10 backdrop-blur-xl p-5 rounded-3xl border border-white/10">
+                                    <Wallet className="h-8 w-8 text-indigo-300" />
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold">{mainBox.name}</h3>
-                                    <p className="text-xs text-blue-300">الصندوق الرئيسي للمسؤول</p>
+                                    <h3 className="text-2xl font-black tracking-tight">{mainBox.name}</h3>
+                                    <p className="text-sm text-indigo-300/80 font-bold tracking-wide uppercase mt-1">الصندوق المركزي</p>
                                 </div>
                             </div>
                         </div>
-                        <div className="space-y-3 pt-6 border-t border-blue-700/50">
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm opacity-80">الرصيد الكلي:</span>
-                                <span className="text-2xl font-black">{mainBox.balance} MRU</span>
+                        <div className="space-y-6 pt-10 border-t border-white/5 relative">
+                            <div className="flex flex-col">
+                                <span className="text-xs font-black text-indigo-300 uppercase tracking-widest mb-2">الرصيد الكلي المتاح</span>
+                                <span className="text-5xl font-black tracking-tighter">{mainBox.balance} <span className="text-xl text-indigo-300/60 font-black ml-1">MRU</span></span>
                             </div>
-                            <div className="flex justify-between text-sm opacity-80">
-                                <span>الحالة:</span>
-                                <span className="text-green-400">نشط</span>
+                            <div className="flex justify-between items-center bg-indigo-500/10 px-6 py-3 rounded-2xl border border-white/5">
+                                <span className="text-sm font-bold opacity-70 tracking-wide uppercase">حالة الحساب</span>
+                                <div className="flex items-center">
+                                    <div className="w-2 h-2 rounded-full bg-emerald-400 mr-2 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                                    <span className="text-sm font-black text-emerald-400">نشط الآن</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -174,43 +183,48 @@ export default function CashBoxesPage() {
 
                 {/* Sub Boxes Cards */}
                 {subBoxes.map((box) => (
-                    <div key={box.id} className="bg-white rounded-xl shadow-md p-6 border-t-4 border-t-blue-500 hover:shadow-lg transition-all relative group">
-                        <div className="absolute top-4 left-4 flex space-x-2 space-x-reverse opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div key={box.id} className="glass-card rounded-[2.5rem] p-10 border-white/40 hover:scale-[1.03] transition-all duration-300 relative group overflow-hidden">
+                        <div className="absolute top-6 left-6 flex space-x-3 space-x-reverse opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                             <button
                                 onClick={() => { setSelectedBox(box); setFundType('deposit'); setShowFundModal(true); }}
-                                className="bg-green-50 text-green-600 p-2 rounded-lg hover:bg-green-100"
+                                className="bg-emerald-50 text-emerald-600 p-3 rounded-2xl hover:bg-emerald-100 transition-colors border border-emerald-100"
                                 title="شحن رصيد"
                             >
-                                <ArrowUpCircle className="h-5 w-5" />
+                                <ArrowUpCircle className="h-6 w-6" />
                             </button>
                             <button
                                 onClick={() => { setSelectedBox(box); setFundType('withdrawal'); setShowFundModal(true); }}
-                                className="bg-red-50 text-red-600 p-2 rounded-lg hover:bg-red-100"
+                                className="bg-red-50 text-red-600 p-3 rounded-2xl hover:bg-red-100 transition-colors border border-red-100"
                                 title="سحب الرصيد للمركزي"
                             >
-                                <ArrowDownCircle className="h-5 w-5" />
+                                <ArrowDownCircle className="h-6 w-6" />
                             </button>
                         </div>
-                        <div className="flex items-center space-x-4 space-x-reverse mb-4">
-                            <div className="bg-blue-100 p-3 rounded-full text-blue-600">
-                                <Wallet className="h-6 w-6" />
+                        <div className="flex items-center space-x-5 space-x-reverse mb-10">
+                            <div className="bg-slate-100 p-5 rounded-3xl text-slate-600 border border-slate-200">
+                                <Wallet className="h-8 w-8" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-gray-900">{box.name}</h3>
-                                <p className="text-sm text-gray-500 flex items-center">
-                                    <Shield className="ml-1 h-3 w-3" />
-                                    {box.owner?.name || 'غير معروف'}
+                                <h3 className="text-2xl font-black text-slate-800 tracking-tight">{box.name}</h3>
+                                <p className="text-sm text-slate-500 font-bold flex items-center mt-1">
+                                    <Shield className="ml-1.5 h-4 w-4 text-indigo-500" />
+                                    الوكيل: {box.owner?.name || 'غير معروف'}
                                 </p>
                             </div>
                         </div>
-                        <div className="space-y-3 pt-2 border-t border-gray-50">
-                            <div className="flex justify-between text-sm">
-                                <span className="text-gray-500">الرصيد الحالي:</span>
-                                <span className="font-bold text-gray-900">{box.balance} MRU</span>
+                        <div className="space-y-6 pt-10 border-t border-slate-100/50">
+                            <div className="flex justify-between items-end">
+                                <div className="flex flex-col">
+                                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">الرصيد الحالي</span>
+                                    <span className="text-3xl font-black text-slate-900 tracking-tighter">{box.balance} <span className="text-sm text-slate-400 font-bold ml-1 uppercase">MRU</span></span>
+                                </div>
+                                <div className="flex flex-col items-end">
+                                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">الحد اليومي</span>
+                                    <span className="text-xl font-black text-slate-600 tracking-tight">{box.daily_limit}</span>
+                                </div>
                             </div>
-                            <div className="flex justify-between text-sm">
-                                <span className="text-gray-500">الحد اليومي:</span>
-                                <span className="text-gray-700">{box.daily_limit} MRU</span>
+                            <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-indigo-500 w-3/4 rounded-full opacity-60"></div>
                             </div>
                         </div>
                     </div>
@@ -219,118 +233,113 @@ export default function CashBoxesPage() {
 
             {/* Fund/Withdraw Modal */}
             {showFundModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in duration-200">
-                        <div className={`${fundType === 'deposit' ? 'bg-green-600' : 'bg-red-600'} px-6 py-4 text-white flex justify-between items-center`}>
-                            <h3 className="text-lg font-bold">
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-6 animate-in fade-in duration-300">
+                    <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in slide-in-from-bottom-8 duration-500 border border-white/20">
+                        <div className={`${fundType === 'deposit' ? 'bg-emerald-600' : 'bg-red-600'} px-10 py-8 text-white flex justify-between items-center relative overflow-hidden`}>
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-16 -mt-16"></div>
+                            <h3 className="text-2xl font-black tracking-tight relative z-10">
                                 {selectedBox?.type === 'main'
-                                    ? (fundType === 'deposit' ? 'تعبئة الصندوق الرئيسي' : 'سحب من الصندوق الرئيسي')
-                                    : (fundType === 'deposit' ? 'شحن رصيد الصندوق' : 'سحب الرصيد للصندوق الرئيسي')}
+                                    ? (fundType === 'deposit' ? 'تعبئة الصندوق الرئيسي' : 'سحب خارجي')
+                                    : (fundType === 'deposit' ? 'إيداع رصيد للوكيل' : 'سحب الرصيد للمركزي')}
                             </h3>
-                            <button onClick={() => setShowFundModal(false)} className="text-white opacity-80 hover:opacity-100">
-                                <X className="h-5 w-5" />
+                            <button onClick={() => setShowFundModal(false)} className="text-white bg-white/10 p-2 rounded-xl hover:bg-white/20 transition-colors relative z-10 border border-white/20">
+                                <X className="h-6 w-6" />
                             </button>
                         </div>
-                        <form onSubmit={handleFund} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
-                            <div className="text-center mb-4">
-                                <p className="text-sm text-gray-600">
-                                    {selectedBox?.type === 'main'
-                                        ? (fundType === 'deposit' ? 'إيداع رصيد خارجي إلى:' : 'سحب رصيد خارجي من:')
-                                        : (fundType === 'deposit' ? 'أنت على وشك تحويل رصيد إلى:' : 'أنت على وشك سحب الرصيد من:')}
+                        <form onSubmit={handleFund} className="p-10 space-y-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                            <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100 flex flex-col items-center text-center">
+                                <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">الصندوق المستهدف</p>
+                                <p className="text-2xl font-black text-slate-900">{selectedBox?.name}</p>
+                                <p className="text-sm font-bold text-slate-500 mt-1 uppercase tracking-tight opacity-70">
+                                    {selectedBox?.owner?.name || (selectedBox?.type === 'main' ? 'المسؤول الرئيسي' : '')}
                                 </p>
-                                <p className="font-bold text-gray-900">{selectedBox?.name}</p>
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1 text-right">
-                                    المبلغ المراد {fundType === 'deposit' ? 'إضافته' : (selectedBox?.type === 'main' ? 'سحبه' : 'إعادته')} (MRU)
-                                </label>
-                                <input
-                                    type="number"
-                                    required
-                                    min="0.01"
-                                    step="0.01"
-                                    placeholder="0.00"
-                                    className={`w-full px-4 py-2 border rounded-lg text-right focus:ring-2 ${fundType === 'deposit' ? 'focus:ring-green-500' : 'focus:ring-red-500'} outline-none text-xl font-bold`}
-                                    value={fundAmount}
-                                    onChange={(e) => setFundAmount(e.target.value)}
-                                />
+
+                            <div className="space-y-3">
+                                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">المبلغ المطلوب (MRU)</label>
+                                <div className="relative">
+                                    <input
+                                        type="number"
+                                        required
+                                        min="0.01"
+                                        step="0.01"
+                                        placeholder="0.00"
+                                        className={`w-full px-8 py-6 bg-slate-50 border-2 border-slate-100 rounded-3xl text-right focus:ring-4 focus:bg-white transition-all ${fundType === 'deposit' ? 'focus:ring-emerald-500/10 focus:border-emerald-500' : 'focus:ring-red-500/10 focus:border-red-500'} outline-none text-4xl font-black text-slate-900`}
+                                        value={fundAmount}
+                                        onChange={(e) => setFundAmount(e.target.value)}
+                                    />
+                                </div>
                             </div>
 
                             {fundType === 'withdrawal' && (
-                                <>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1 text-right">نوع السحب</label>
+                                <div className="space-y-6 pt-6 border-t border-slate-100">
+                                    <div className="space-y-3">
+                                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">نوع السحب</label>
                                         <select
-                                            className="w-full px-4 py-2 border rounded-lg text-right focus:ring-2 focus:ring-red-500 outline-none appearance-none cursor-pointer"
+                                            className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-right focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none appearance-none cursor-pointer font-bold text-slate-700"
                                             value={detailedFund.withdrawal_type_id}
                                             onChange={(e) => setDetailedFund({ ...detailedFund, withdrawal_type_id: e.target.value })}
                                             required
                                         >
-                                            <option value="">اختر نوع السحب...</option>
+                                            <option value="">اختر النوع...</option>
                                             {withdrawalTypes.map(t => (
                                                 <option key={t.id} value={t.id}>{t.name}</option>
                                             ))}
                                         </select>
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1 text-right">رقم الحساب (اختياري)</label>
-                                        <input
-                                            type="text"
-                                            placeholder="رقم الحساب..."
-                                            className="w-full px-4 py-2 border rounded-lg text-right focus:ring-2 focus:ring-red-500 outline-none"
-                                            value={detailedFund.account_number}
-                                            onChange={(e) => setDetailedFund({ ...detailedFund, account_number: e.target.value })}
-                                        />
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-3">
+                                            <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">رقم الحساب</label>
+                                            <input
+                                                type="text"
+                                                className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-right focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none font-bold"
+                                                value={detailedFund.account_number}
+                                                onChange={(e) => setDetailedFund({ ...detailedFund, account_number: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-3">
+                                            <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">رقم الهاتف</label>
+                                            <input
+                                                type="text"
+                                                className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-right focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none font-bold"
+                                                value={detailedFund.phone_number}
+                                                onChange={(e) => setDetailedFund({ ...detailedFund, phone_number: e.target.value })}
+                                            />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1 text-right">رقم الهاتف (اختياري)</label>
-                                        <input
-                                            type="text"
-                                            placeholder="رقم الهاتف..."
-                                            className="w-full px-4 py-2 border rounded-lg text-right focus:ring-2 focus:ring-red-500 outline-none"
-                                            value={detailedFund.phone_number}
-                                            onChange={(e) => setDetailedFund({ ...detailedFund, phone_number: e.target.value })}
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1 text-right">ملاحظات (اختياري)</label>
+                                    <div className="space-y-3">
+                                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">ملاحظات إضافية</label>
                                         <textarea
-                                            placeholder="ملاحظات إضافية..."
-                                            className="w-full px-4 py-2 border rounded-lg text-right focus:ring-2 focus:ring-red-500 outline-none h-20"
+                                            className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-right focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none h-24 font-bold"
                                             value={detailedFund.notes}
                                             onChange={(e) => setDetailedFund({ ...detailedFund, notes: e.target.value })}
                                         />
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1 text-right">إرفاق صور (إثبات)</label>
-                                        <div className="mt-1 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-red-500 transition-colors cursor-pointer relative">
+                                    <div className="space-y-3">
+                                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">إثبات العملية (صور)</label>
+                                        <div className="mt-1 group flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl p-8 hover:border-indigo-500 hover:bg-indigo-50/30 transition-all cursor-pointer relative overflow-hidden">
                                             <input
-                                                type="file"
-                                                multiple
-                                                accept="image/*"
-                                                className="absolute inset-0 opacity-0 cursor-pointer"
-                                                onChange={(e) => {
-                                                    if (e.target.files) {
-                                                        setFundImages(Array.from(e.target.files));
-                                                    }
-                                                }}
+                                                type="file" multiple accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-20"
+                                                onChange={(e) => e.target.files && setFundImages(Array.from(e.target.files))}
                                             />
-                                            <div className="text-center">
-                                                <Camera className="mx-auto h-8 w-8 text-gray-400" />
-                                                <span className="mt-2 block text-sm font-medium text-gray-600">
-                                                    {fundImages.length > 0 ? `تم اختيار ${fundImages.length} صور` : 'اضغط لاختيار الصور'}
+                                            <div className="text-center relative z-10">
+                                                <div className="bg-slate-100 p-4 rounded-full mb-3 group-hover:bg-indigo-100 transition-colors inline-block">
+                                                    <Camera className="h-6 w-6 text-slate-400 group-hover:text-indigo-600" />
+                                                </div>
+                                                <span className="block text-sm font-black text-slate-500 group-hover:text-indigo-700">
+                                                    {fundImages.length > 0 ? `تم اختيار ${fundImages.length} صور` : 'اسحب الصور هنا أو اضغط للاختيار'}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
-                                </>
+                                </div>
                             )}
 
                             <button
                                 type="submit"
-                                className={`w-full ${fundType === 'deposit' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'} text-white py-3 rounded-lg font-bold transition-colors shadow-md mt-4`}
+                                className={`w-full ${fundType === 'deposit' ? 'bg-emerald-600 shadow-emerald-500/30 hover:bg-emerald-700' : 'bg-red-600 shadow-red-500/30 hover:bg-red-700'} text-white py-6 rounded-3xl font-black text-xl transition-all shadow-xl hover:-translate-y-1 active:scale-95`}
                             >
-                                تأكيد العملية
+                                تأكيد العملية الآن
                             </button>
                         </form>
                     </div>
@@ -339,64 +348,61 @@ export default function CashBoxesPage() {
 
             {/* Create Box Modal */}
             {showModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-md overflow-hidden animate-in fade-in zoom-in duration-200">
-                        <div className="bg-blue-900 px-6 py-4 text-white flex justify-between items-center">
-                            <h3 className="text-lg font-bold">إنشاء صندوق جديد</h3>
-                            <button onClick={() => setShowModal(false)} className="text-blue-200 hover:text-white">
-                                <X className="h-5 w-5" />
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-6 animate-in fade-in duration-300">
+                    <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden animate-in zoom-in slide-in-from-bottom-8 duration-500 border border-white/20">
+                        <div className="premium-gradient px-10 py-8 text-white flex justify-between items-center relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-16 -mt-16"></div>
+                            <h3 className="text-2xl font-black tracking-tight relative z-10">إنشاء صندوق جديد</h3>
+                            <button onClick={() => setShowModal(false)} className="text-white bg-white/10 p-2 rounded-xl hover:bg-white/20 transition-colors relative z-10 border border-white/20">
+                                <X className="h-6 w-6" />
                             </button>
                         </div>
-                        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1 text-right">اسم الصندوق</label>
+                        <form onSubmit={handleSubmit} className="p-10 space-y-8">
+                            <div className="space-y-3">
+                                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">اسم الصندوق</label>
                                 <input
-                                    type="text"
-                                    required
-                                    placeholder="مثلاً: صندوق وكالة تفرغ زينة"
-                                    className="w-full px-4 py-2 border rounded-lg text-right focus:ring-2 focus:ring-blue-500 outline-none"
+                                    type="text" required placeholder="مثلاً: وكالة تفرغ زينة"
+                                    className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-right focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none font-bold text-slate-900"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 />
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1 text-right">صاحب الصندوق (الوكيل)</label>
+                            <div className="space-y-3">
+                                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">الوكيل المسؤول</label>
                                 <select
                                     required
-                                    className="w-full px-4 py-2 border rounded-lg text-right focus:ring-2 focus:ring-blue-500 outline-none appearance-none"
+                                    className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-right focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none appearance-none cursor-pointer font-bold text-slate-900"
                                     value={formData.owner_id}
                                     onChange={(e) => setFormData({ ...formData, owner_id: e.target.value })}
                                 >
-                                    <option value="">اختر وكيلاً...</option>
+                                    <option value="">اختر الوكيل...</option>
                                     {agents.map(agent => (
                                         <option key={agent.id} value={agent.id}>{agent.name} ({agent.email})</option>
                                     ))}
                                 </select>
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1 text-right">الحد اليومي المسموح به (MRU)</label>
+                            <div className="space-y-3">
+                                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">الحد اليومي للإيداعات (MRU)</label>
                                 <input
-                                    type="number"
-                                    required
-                                    className="w-full px-4 py-2 border rounded-lg text-right focus:ring-2 focus:ring-blue-500 outline-none"
+                                    type="number" required
+                                    className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-right focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none font-bold text-slate-900"
                                     value={formData.daily_limit}
                                     onChange={(e) => setFormData({ ...formData, daily_limit: e.target.value })}
                                 />
                             </div>
-                            <div className="pt-4 flex space-x-3 space-x-reverse">
+                            <div className="pt-6 flex space-x-4 space-x-reverse">
                                 <button
                                     type="submit"
                                     disabled={agents.length === 0}
-                                    className={`flex-1 ${agents.length === 0 ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'} text-white py-2 rounded-lg font-bold transition-colors`}
+                                    className="flex-1 premium-gradient text-white py-5 rounded-2xl font-black text-lg transition-all shadow-xl shadow-indigo-500/20 hover:-translate-y-1 active:scale-95 disabled:opacity-50"
                                 >
-                                    تأكيد الإنشاء
+                                    تأكيد وإنشاء الصندوق
                                 </button>
                                 <button
-                                    type="button"
-                                    onClick={() => setShowModal(false)}
-                                    className="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg font-bold hover:bg-gray-200 transition-colors"
+                                    type="button" onClick={() => setShowModal(false)}
+                                    className="flex-1 bg-slate-100 text-slate-600 py-5 rounded-2xl font-black text-lg hover:bg-slate-200 transition-all border border-slate-200"
                                 >
-                                    إلغاء
+                                    إلغاء النافذة
                                 </button>
                             </div>
                         </form>

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import api from '@/lib/api';
-import { Check, X, Eye, Image as ImageIcon, Plus, Edit2, Trash2, Calendar, Search, Filter, Download } from 'lucide-react';
+import { Check, X, Eye, Image as ImageIcon, Plus, Edit2, Trash2, Calendar, Search, Filter, Download, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 import * as XLSX from 'xlsx';
 export default function TransactionsPage() {
     const [transactions, setTransactions] = useState<any[]>([]);
@@ -156,185 +156,210 @@ export default function TransactionsPage() {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-12">
             {/* Header & Filters */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col xl:flex-row xl:items-center justify-between gap-6">
-                <div className="flex flex-col md:flex-row md:items-center gap-6">
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-800">سجل العمليات</h2>
-                        <p className="text-gray-500 text-sm">إدارة ومراقبة كافة العمليات المالية</p>
-                    </div>
+            <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-10">
+                <div className="space-y-4">
+                    <h2 className="text-5xl font-black text-slate-900 tracking-tighter">سجل العمليات</h2>
+                    <p className="text-slate-500 text-lg font-medium">متابعة دقيقة لكافة الحركات المالية وتاريخ المحفظة</p>
+                </div>
 
-                    <div className="flex flex-wrap items-center gap-3">
-                        <div className="flex items-center bg-gray-50 rounded-lg px-3 py-2 border border-gray-200">
-                            <Calendar className="h-4 w-4 text-gray-400 ml-2" />
+                <div className="flex flex-wrap items-center gap-4 bg-white p-6 rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100/50">
+                    <div className="flex items-center bg-slate-50 rounded-2xl px-5 py-3 border border-slate-100 group focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all">
+                        <Calendar className="h-5 w-5 text-slate-400 ml-3 group-focus-within:text-indigo-500 transition-colors" />
+                        <div className="flex items-center text-sm font-bold text-slate-700">
                             <input
                                 type="date"
-                                className="bg-transparent text-sm outline-none"
+                                className="bg-transparent outline-none cursor-pointer"
                                 value={fromDate}
                                 onChange={(e) => setFromDate(e.target.value)}
                             />
-                            <span className="mx-2 text-gray-300">إلى</span>
+                            <span className="mx-4 text-slate-300 font-black">/</span>
                             <input
                                 type="date"
-                                className="bg-transparent text-sm outline-none"
+                                className="bg-transparent outline-none cursor-pointer"
                                 value={toDate}
                                 onChange={(e) => setToDate(e.target.value)}
                             />
                         </div>
+                    </div>
 
+                    <div className="relative">
                         <select
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
-                            className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500"
+                            className="bg-slate-50 border border-slate-100 rounded-2xl px-8 py-3.5 text-sm font-black text-slate-700 outline-none appearance-none cursor-pointer focus:ring-4 focus:ring-indigo-500/10 transition-all pr-12"
                         >
-                            <option value="">كل الحالات</option>
-                            <option value="pending">بانتظار الموافقة</option>
-                            <option value="approved">مقبول</option>
-                            <option value="rejected">مرفوض</option>
+                            <option value="">كل العمليات</option>
+                            <option value="pending">بانتظار المراجعة</option>
+                            <option value="approved">تم قبولها</option>
+                            <option value="rejected">مرفوضة</option>
                         </select>
-
-                        {(fromDate || toDate || status !== 'pending') && (
-                            <button
-                                onClick={() => { setFromDate(''); setToDate(''); setStatus('pending'); }}
-                                className="text-red-500 hover:text-red-700 text-sm font-bold bg-red-50 px-3 py-2 rounded-lg transition-colors"
-                            >
-                                تفريغ
-                            </button>
-                        )}
+                        <Filter className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                     </div>
-                </div>
 
-                <div className="flex items-center gap-3">
-                    <button
-                        onClick={handleExport}
-                        className="bg-green-600 text-white px-6 py-2.5 rounded-xl flex items-center hover:bg-green-700 transition-all shadow-lg shadow-green-100 font-bold"
-                    >
-                        <Download className="ml-2 h-5 w-5" />
-                        تنزيل Excel
-                    </button>
+                    {(fromDate || toDate || status !== 'pending') && (
+                        <button
+                            onClick={() => { setFromDate(''); setToDate(''); setStatus('pending'); }}
+                            className="text-red-500 hover:text-red-600 p-3.5 bg-red-50 rounded-2xl border border-red-100 transition-all hover:scale-110 active:scale-95 shadow-sm"
+                            title="تفريغ البحث"
+                        >
+                            <Trash2 className="h-5 w-5" />
+                        </button>
+                    )}
 
-                    <button
-                        onClick={() => { setEditMode(false); setShowModal(true); }}
-                        className="bg-blue-600 text-white px-6 py-2.5 rounded-xl flex items-center hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 font-bold"
-                    >
-                        <Plus className="ml-2 h-5 w-5" />
-                        إضافة عملية
-                    </button>
+                    <div className="h-10 w-[2px] bg-slate-100 mx-2 hidden xl:block"></div>
+
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={handleExport}
+                            className="bg-emerald-50 text-emerald-600 px-8 py-3.5 rounded-2xl flex items-center hover:bg-emerald-100 transition-all border border-emerald-100 font-black text-sm uppercase tracking-wider"
+                        >
+                            <Download className="ml-2.5 h-5 w-5" />
+                            تصدير Excel
+                        </button>
+
+                        <button
+                            onClick={() => { setEditMode(false); setShowModal(true); }}
+                            className="premium-gradient text-white px-8 py-3.5 rounded-2xl flex items-center shadow-xl shadow-indigo-500/20 hover:-translate-y-1 active:scale-95 transition-all font-black text-sm"
+                        >
+                            <Plus className="ml-2.5 h-5 w-5 font-black" />
+                            إضافة عملية يدوية
+                        </button>
+                    </div>
                 </div>
             </div>
 
             {/* Transactions Table */}
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+            <div className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 shadow-slate-200/60">
                 <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200 text-right">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">المعرف</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">الصندوق</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">الوكيل</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">النوع</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">نوع السحب</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">المبلغ</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">التاريخ</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">الحالة</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">الصور</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-left">الإجراءات</th>
+                    <table className="min-w-full divide-y divide-slate-100 text-right">
+                        <thead>
+                            <tr className="bg-slate-50/50">
+                                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">المعرف</th>
+                                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">نوع العملة / الحساب</th>
+                                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">الوكيل المسؤول</th>
+                                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">نوع الحركة</th>
+                                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-center">المبلغ</th>
+                                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">توقيت العملية</th>
+                                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-center">الوضعية</th>
+                                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-center">المرفقات</th>
+                                <th className="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-left">الإجراءات</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-100">
+                        <tbody className="divide-y divide-slate-50">
                             {loading ? (
                                 <tr>
-                                    <td colSpan={10} className="px-6 py-12 text-center">
+                                    <td colSpan={10} className="px-8 py-20 text-center">
                                         <div className="flex flex-col items-center">
-                                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-2"></div>
-                                            <span className="text-gray-500">جاري تحميل العمليات...</span>
+                                            <div className="w-12 h-12 rounded-full border-4 border-indigo-100 border-t-indigo-600 animate-spin mb-4"></div>
+                                            <span className="text-slate-400 font-bold tracking-wide">جاري مزامنة السجلات...</span>
                                         </div>
                                     </td>
                                 </tr>
                             ) : transactions.length === 0 ? (
                                 <tr>
-                                    <td colSpan={10} className="px-6 py-12 text-center text-gray-400">
+                                    <td colSpan={10} className="px-8 py-20 text-center">
                                         <div className="flex flex-col items-center">
-                                            <Search className="h-10 w-10 mb-2 opacity-20" />
-                                            <span>لا توجد عمليات تطابق معايير البحث</span>
+                                            <div className="bg-slate-50 p-6 rounded-full mb-4">
+                                                <Search className="h-10 w-10 text-slate-200" />
+                                            </div>
+                                            <span className="text-slate-400 font-black text-lg">لم يتم العثور على أي بيانات</span>
+                                            <p className="text-slate-300 text-sm mt-1">جرب تغيير معايير البحث أو الفلترة</p>
                                         </div>
                                     </td>
                                 </tr>
                             ) : (
                                 transactions.map((t) => (
-                                    <tr key={t.id} className="hover:bg-blue-50/30 transition-colors">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-mono">#{t.id}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">{t.cash_box?.name || 'غير معروف'}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{t.creator?.name || 'آلي'}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                            <span className={`font-bold ${t.type === 'deposit' ? 'text-green-600' : 'text-red-600'}`}>
-                                                {t.type === 'deposit' ? 'إيداع' : 'سحب'}
-                                            </span>
+                                    <tr key={t.id} className="hover:bg-slate-50/80 transition-all group">
+                                        <td className="px-8 py-6 whitespace-nowrap">
+                                            <span className="text-xs font-black text-slate-400 font-mono tracking-tighter">TRX-{t.id}</span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                            {t.withdrawal_type?.name || '-'}
+                                        <td className="px-8 py-6 whitespace-nowrap">
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-black text-slate-900 tracking-tight">{t.cash_box?.name || 'غير معروف'}</span>
+                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{t.withdrawal_type?.name || 'حركة داخلية'}</span>
+                                            </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-black text-gray-900">{t.amount} MRU</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-500 text-right dir-rtl">
-                                            {t.created_at ? (
-                                                <>
-                                                    <div className="font-medium text-gray-700">{new Date(t.created_at).toLocaleDateString('ar-MA')}</div>
-                                                    <div className="text-[10px] opacity-60">{new Date(t.created_at).toLocaleTimeString('ar-MA', { hour: '2-digit', minute: '2-digit' })}</div>
-                                                </>
-                                            ) : '-'}
+                                        <td className="px-8 py-6 whitespace-nowrap">
+                                            <div className="flex items-center">
+                                                <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-black text-xs ml-3 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                                    {(t.creator?.name || 'A')[0].toUpperCase()}
+                                                </div>
+                                                <span className="text-sm font-bold text-slate-600">{t.creator?.name || 'آلي'}</span>
+                                            </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-center">
-                                            <span className={`px-3 py-1 text-xs font-bold rounded-full ${t.status === 'approved' ? 'bg-green-100 text-green-700' :
-                                                t.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                                                    'bg-orange-100 text-orange-700'
+                                        <td className="px-8 py-6 whitespace-nowrap">
+                                            <div className={`inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${t.type === 'deposit'
+                                                ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
+                                                : 'bg-red-50 text-red-600 border-red-100'
                                                 }`}>
-                                                {t.status === 'approved' ? 'مقبول' : t.status === 'rejected' ? 'مرفوض' : 'معلق'}
+                                                <div className={`w-1.5 h-1.5 rounded-full ml-2 ${t.type === 'deposit' ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
+                                                {t.type === 'deposit' ? 'إيداع مالي' : 'سحب خارجي'}
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-6 whitespace-nowrap text-center">
+                                            <span className="text-xl font-black text-slate-900 tracking-tighter">{t.amount} <span className="text-xs text-slate-400 font-bold ml-1 uppercase">mru</span></span>
+                                        </td>
+                                        <td className="px-8 py-6 whitespace-nowrap">
+                                            <div className="flex flex-col text-right">
+                                                <span className="text-sm font-black text-slate-700">{new Date(t.created_at).toLocaleDateString('ar-MA')}</span>
+                                                <span className="text-[10px] font-bold text-slate-400 tracking-widest">{new Date(t.created_at).toLocaleTimeString('ar-MA', { hour: '2-digit', minute: '2-digit' })}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-6 whitespace-nowrap text-center">
+                                            <span className={`px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-sm border ${t.status === 'approved' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' :
+                                                t.status === 'rejected' ? 'bg-red-50 text-red-700 border-red-100' :
+                                                    'bg-amber-50 text-amber-700 border-amber-100'
+                                                }`}>
+                                                {t.status === 'approved' ? 'معتمد' : t.status === 'rejected' ? 'ملغي' : 'قيد التدقيق'}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {t.media?.length > 0 && (
+                                        <td className="px-8 py-6 whitespace-nowrap text-center">
+                                            {t.media?.length > 0 ? (
                                                 <button
                                                     onClick={() => setSelectedImage(t.media[0].image_url)}
-                                                    className="bg-blue-50 text-blue-600 p-2 rounded-lg hover:bg-blue-100 transition-colors"
+                                                    className="bg-indigo-50 text-indigo-600 p-3 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all transform hover:rotate-12 border border-indigo-100"
                                                 >
                                                     <ImageIcon className="h-5 w-5" />
                                                 </button>
+                                            ) : (
+                                                <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">بدون صور</span>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-left">
-                                            <div className="flex items-center space-x-2 space-x-reverse justify-end">
+                                        <td className="px-8 py-6 whitespace-nowrap text-left">
+                                            <div className="flex items-center space-x-3 space-x-reverse justify-end opacity-0 group-hover:opacity-100 transition-opacity">
                                                 {t.status === 'pending' && (
                                                     <>
                                                         <button
                                                             onClick={() => handleApprove(t.id)}
-                                                            className="bg-green-50 text-green-600 p-2 rounded-lg hover:bg-green-100 transition-colors"
+                                                            className="bg-white text-emerald-600 p-2.5 rounded-xl hover:bg-emerald-600 hover:text-white transition-all shadow-sm border border-emerald-100"
                                                             title="قبول"
                                                         >
-                                                            <Check className="h-5 w-5" />
+                                                            <Check className="h-4 w-4" />
                                                         </button>
                                                         <button
                                                             onClick={() => handleReject(t.id)}
-                                                            className="bg-red-50 text-red-600 p-2 rounded-lg hover:bg-red-100 transition-colors"
+                                                            className="bg-white text-red-600 p-2.5 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm border border-red-100"
                                                             title="رفض"
                                                         >
-                                                            <X className="h-5 w-5" />
+                                                            <X className="h-4 w-4" />
                                                         </button>
                                                         <button
                                                             onClick={() => openEdit(t)}
-                                                            className="bg-blue-50 text-blue-600 p-2 rounded-lg hover:bg-blue-100 transition-colors"
+                                                            className="bg-white text-indigo-600 p-2.5 rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm border border-indigo-100"
                                                             title="تعديل"
                                                         >
-                                                            <Edit2 className="h-5 w-5" />
+                                                            <Edit2 className="h-4 w-4" />
                                                         </button>
                                                     </>
                                                 )}
                                                 <button
                                                     onClick={() => handleDelete(t.id)}
-                                                    className="bg-gray-50 text-gray-400 p-2 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors"
+                                                    className="bg-white text-slate-400 p-2.5 rounded-xl hover:bg-red-50 hover:text-red-500 transition-all shadow-sm border border-slate-100"
                                                     title="حذف"
                                                 >
-                                                    <Trash2 className="h-5 w-5" />
+                                                    <Trash2 className="h-4 w-4" />
                                                 </button>
                                             </div>
                                         </td>
@@ -348,21 +373,24 @@ export default function TransactionsPage() {
 
             {/* Add/Edit Modal */}
             {showModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-                        <div className="bg-blue-900 px-6 py-4 text-white flex justify-between items-center">
-                            <h3 className="text-lg font-bold">{editMode ? 'تعديل العملية' : 'إضافة عملية جديدة'}</h3>
-                            <button onClick={() => setShowModal(false)} className="text-blue-200 hover:text-white">
-                                <X className="h-5 w-5" />
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-6 animate-in fade-in duration-300">
+                    <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden animate-in zoom-in slide-in-from-bottom-8 duration-500 border border-white/20">
+                        <div className="premium-gradient px-10 py-8 text-white flex justify-between items-center relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-16 -mt-16"></div>
+                            <h3 className="text-2xl font-black tracking-tight relative z-10">
+                                {editMode ? 'تعديل بيانات العملية' : 'إضافة عملية مالية'}
+                            </h3>
+                            <button onClick={() => setShowModal(false)} className="text-white bg-white/10 p-2 rounded-xl hover:bg-white/20 transition-colors relative z-10 border border-white/20">
+                                <X className="h-6 w-6" />
                             </button>
                         </div>
-                        <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+                        <form onSubmit={handleSubmit} className="p-10 space-y-8 max-h-[75vh] overflow-y-auto custom-scrollbar">
                             {!editMode && (
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1 text-right">الصندوق</label>
+                                <div className="space-y-3">
+                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">مصدر / وجهة الصندوق</label>
                                     <select
                                         required
-                                        className="w-full px-4 py-2 border rounded-lg text-right outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-right outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 appearance-none cursor-pointer font-bold text-slate-900"
                                         value={formData.cashbox_id}
                                         onChange={(e) => setFormData({ ...formData, cashbox_id: e.target.value })}
                                     >
@@ -375,70 +403,76 @@ export default function TransactionsPage() {
                             )}
 
                             {!editMode && (
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1 text-right">نوع العملية</label>
-                                    <div className="grid grid-cols-2 gap-2">
+                                <div className="space-y-3">
+                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">تصنيف الحركة المالية</label>
+                                    <div className="grid grid-cols-2 gap-4">
                                         <button
                                             type="button"
                                             onClick={() => setFormData({ ...formData, type: 'deposit' })}
-                                            className={`py-2 rounded-lg font-bold transition-all ${formData.type === 'deposit' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-600'}`}
+                                            className={`py-5 rounded-2xl font-black transition-all flex flex-col items-center border-2 ${formData.type === 'deposit'
+                                                ? 'bg-emerald-50 border-emerald-500 text-emerald-600 shadow-lg shadow-emerald-500/10'
+                                                : 'bg-slate-50 border-slate-100 text-slate-400 opacity-60'
+                                                }`}
                                         >
-                                            إيداع
+                                            <ArrowUpCircle className={`mb-2 h-6 w-6 ${formData.type === 'deposit' ? 'text-emerald-500' : 'text-slate-300'}`} />
+                                            إيداع مالي
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => setFormData({ ...formData, type: 'withdrawal' })}
-                                            className={`py-2 rounded-lg font-bold transition-all ${formData.type === 'withdrawal' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-600'}`}
+                                            className={`py-5 rounded-2xl font-black transition-all flex flex-col items-center border-2 ${formData.type === 'withdrawal'
+                                                ? 'bg-red-50 border-red-500 text-red-600 shadow-lg shadow-red-500/10'
+                                                : 'bg-slate-50 border-slate-100 text-slate-400 opacity-60'
+                                                }`}
                                         >
-                                            سحب
+                                            <ArrowDownCircle className={`mb-2 h-6 w-6 ${formData.type === 'withdrawal' ? 'text-red-500' : 'text-slate-300'}`} />
+                                            سحب خارجي
                                         </button>
                                     </div>
                                 </div>
                             )}
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1 text-right">المبلغ (MRU)</label>
+                            <div className="space-y-3">
+                                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">القيمة النقدية (MRU)</label>
                                 <input
-                                    type="number"
-                                    required
-                                    step="0.01"
-                                    className="w-full px-4 py-2 border rounded-lg text-right outline-none focus:ring-2 focus:ring-blue-500 text-xl font-bold"
+                                    type="number" required step="0.01"
+                                    className="w-full px-8 py-6 bg-slate-50 border-2 border-slate-100 rounded-[2rem] text-right outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 text-4xl font-black text-slate-900 transition-all"
                                     value={formData.amount}
                                     onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                                 />
                             </div>
 
                             {formData.type === 'withdrawal' && (
-                                <div className="space-y-4 pt-2 border-t border-gray-100 mt-2">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1 text-right">نوع السحب</label>
+                                <div className="space-y-6 pt-6 border-t border-slate-100 mt-6 bg-slate-50/50 p-6 rounded-3xl animate-in slide-in-from-top-4 duration-300">
+                                    <div className="space-y-3">
+                                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">طريقة السحب</label>
                                         <select
-                                            className="w-full px-4 py-2 border rounded-lg text-right outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="w-full px-6 py-4 bg-white border-2 border-slate-100 rounded-2xl text-right outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 appearance-none font-bold"
                                             value={formData.withdrawal_type_id}
                                             onChange={(e) => setFormData({ ...formData, withdrawal_type_id: e.target.value })}
                                             required
                                         >
-                                            <option value="">اختر النوع...</option>
+                                            <option value="">اختر النوع المميز...</option>
                                             {withdrawalTypes.map(t => (
                                                 <option key={t.id} value={t.id}>{t.name}</option>
                                             ))}
                                         </select>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1 text-right text-xs">رقم الحساب</label>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">رقم الحساب</label>
                                             <input
                                                 type="text"
-                                                className="w-full px-3 py-2 border rounded-lg text-right text-sm"
+                                                className="w-full px-5 py-3.5 bg-white border-2 border-slate-100 rounded-xl text-right text-sm font-bold"
                                                 value={formData.account_number}
                                                 onChange={(e) => setFormData({ ...formData, account_number: e.target.value })}
                                             />
                                         </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1 text-right text-xs">رقم الهاتف</label>
+                                        <div className="space-y-2">
+                                            <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">رقم الهاتف</label>
                                             <input
                                                 type="text"
-                                                className="w-full px-3 py-2 border rounded-lg text-right text-sm"
+                                                className="w-full px-5 py-3.5 bg-white border-2 border-slate-100 rounded-xl text-right text-sm font-bold"
                                                 value={formData.phone_number}
                                                 onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
                                             />
@@ -447,20 +481,21 @@ export default function TransactionsPage() {
                                 </div>
                             )}
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1 text-right">ملاحظات</label>
+                            <div className="space-y-3">
+                                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest text-right">ملاحظات إضافية (اختياري)</label>
                                 <textarea
-                                    className="w-full px-4 py-2 border rounded-lg text-right outline-none focus:ring-2 focus:ring-blue-500 h-20"
+                                    className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-right outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 h-28 font-medium transition-all"
                                     value={formData.notes}
                                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                                    placeholder="اكتب أي تفاصيل إضافية هنا..."
                                 ></textarea>
                             </div>
 
                             <button
                                 type="submit"
-                                className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors mt-4 shadow-lg shadow-blue-100"
+                                className="w-full premium-gradient text-white font-black py-6 rounded-[2rem] shadow-2xl shadow-indigo-500/20 hover:-translate-y-1 active:scale-95 transition-all text-xl tracking-tight"
                             >
-                                {editMode ? 'تحديث التعديلات' : 'تأكيد الإضافة'}
+                                {editMode ? 'حفظ التعديلات النهائية' : 'اعتـماد العملـية الآن'}
                             </button>
                         </form>
                     </div>
