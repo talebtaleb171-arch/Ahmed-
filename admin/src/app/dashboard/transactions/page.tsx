@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import api from '@/lib/api';
-import { Check, X, Eye, Image as ImageIcon, Plus, Edit2, Trash2, Calendar, Search, Filter, Download, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
+import { Check, X, Eye, Image as ImageIcon, Plus, Edit2, Trash2, Calendar, Search, Filter, Download, ArrowUpCircle, ArrowDownCircle, Clock, User, Hash, FileText, CreditCard, Phone, StickyNote, AlertTriangle, Wallet } from 'lucide-react';
 import * as XLSX from 'xlsx';
 export default function TransactionsPage() {
     const [transactions, setTransactions] = useState<any[]>([]);
@@ -11,6 +11,8 @@ export default function TransactionsPage() {
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const [detailTransaction, setDetailTransaction] = useState<any>(null);
 
     // CRUD States
     const [showModal, setShowModal] = useState(false);
@@ -328,39 +330,48 @@ export default function TransactionsPage() {
                                             )}
                                         </td>
                                         <td className="px-8 py-6 whitespace-nowrap text-left">
-                                            <div className="flex items-center space-x-3 space-x-reverse justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-                                                {t.status === 'pending' && (
-                                                    <>
-                                                        <button
-                                                            onClick={() => handleApprove(t.id)}
-                                                            className="bg-white text-emerald-600 p-2.5 rounded-xl hover:bg-emerald-600 hover:text-white transition-all shadow-sm border border-emerald-100"
-                                                            title="قبول"
-                                                        >
-                                                            <Check className="h-4 w-4" />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleReject(t.id)}
-                                                            className="bg-white text-red-600 p-2.5 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm border border-red-100"
-                                                            title="رفض"
-                                                        >
-                                                            <X className="h-4 w-4" />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => openEdit(t)}
-                                                            className="bg-white text-indigo-600 p-2.5 rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm border border-indigo-100"
-                                                            title="تعديل"
-                                                        >
-                                                            <Edit2 className="h-4 w-4" />
-                                                        </button>
-                                                    </>
-                                                )}
+                                            <div className="flex items-center space-x-3 space-x-reverse justify-end">
                                                 <button
-                                                    onClick={() => handleDelete(t.id)}
-                                                    className="bg-white text-slate-400 p-2.5 rounded-xl hover:bg-red-50 hover:text-red-500 transition-all shadow-sm border border-slate-100"
-                                                    title="حذف"
+                                                    onClick={() => { setDetailTransaction(t); setShowDetailsModal(true); }}
+                                                    className="bg-indigo-50 text-indigo-600 p-2.5 rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm border border-indigo-100"
+                                                    title="عرض التفاصيل"
                                                 >
-                                                    <Trash2 className="h-4 w-4" />
+                                                    <Eye className="h-4 w-4" />
                                                 </button>
+                                                <div className="flex items-center space-x-3 space-x-reverse opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    {t.status === 'pending' && (
+                                                        <>
+                                                            <button
+                                                                onClick={() => handleApprove(t.id)}
+                                                                className="bg-white text-emerald-600 p-2.5 rounded-xl hover:bg-emerald-600 hover:text-white transition-all shadow-sm border border-emerald-100"
+                                                                title="قبول"
+                                                            >
+                                                                <Check className="h-4 w-4" />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleReject(t.id)}
+                                                                className="bg-white text-red-600 p-2.5 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm border border-red-100"
+                                                                title="رفض"
+                                                            >
+                                                                <X className="h-4 w-4" />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => openEdit(t)}
+                                                                className="bg-white text-indigo-600 p-2.5 rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm border border-indigo-100"
+                                                                title="تعديل"
+                                                            >
+                                                                <Edit2 className="h-4 w-4" />
+                                                            </button>
+                                                        </>
+                                                    )}
+                                                    <button
+                                                        onClick={() => handleDelete(t.id)}
+                                                        className="bg-white text-slate-400 p-2.5 rounded-xl hover:bg-red-50 hover:text-red-500 transition-all shadow-sm border border-slate-100"
+                                                        title="حذف"
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </button>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -513,6 +524,196 @@ export default function TransactionsPage() {
                         >
                             <X className="h-6 w-6" />
                         </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Transaction Details Modal */}
+            {showDetailsModal && detailTransaction && (
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-6 animate-in fade-in duration-300" onClick={() => setShowDetailsModal(false)}>
+                    <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in slide-in-from-bottom-8 duration-500 border border-white/20" onClick={e => e.stopPropagation()}>
+                        {/* Header */}
+                        <div className={`px-10 py-8 text-white flex justify-between items-center relative overflow-hidden ${detailTransaction.type === 'deposit' ? 'bg-gradient-to-l from-emerald-600 to-emerald-700' : 'bg-gradient-to-l from-red-600 to-red-700'}`}>
+                            <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+                            <div className="relative z-10">
+                                <div className="flex items-center space-x-4 space-x-reverse">
+                                    <div className="bg-white/10 p-3.5 rounded-2xl backdrop-blur-md border border-white/10">
+                                        {detailTransaction.type === 'deposit' ? <ArrowUpCircle className="h-7 w-7" /> : <ArrowDownCircle className="h-7 w-7" />}
+                                    </div>
+                                    <div>
+                                        <h3 className="text-2xl font-black tracking-tight">
+                                            {detailTransaction.type === 'deposit' ? 'تفاصيل الإيداع' : 'تفاصيل السحب'}
+                                        </h3>
+                                        <p className="text-white/70 text-sm font-bold mt-1">TRX-{detailTransaction.id}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onClick={() => setShowDetailsModal(false)} className="text-white bg-white/10 p-2.5 rounded-xl hover:bg-white/20 transition-colors relative z-10 border border-white/20">
+                                <X className="h-6 w-6" />
+                            </button>
+                        </div>
+
+                        {/* Amount Section */}
+                        <div className="px-10 py-8 bg-slate-50/50 border-b border-slate-100 text-center">
+                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">المبلغ</p>
+                            <p className={`text-5xl font-black tracking-tighter ${detailTransaction.type === 'deposit' ? 'text-emerald-600' : 'text-red-600'}`}>
+                                {detailTransaction.type === 'deposit' ? '+' : '-'}{detailTransaction.amount}
+                                <span className="text-xl text-slate-400 font-bold mr-2">MRU</span>
+                            </p>
+                            <div className="mt-4">
+                                <span className={`inline-flex items-center px-5 py-2 text-xs font-black uppercase tracking-widest rounded-full border ${detailTransaction.status === 'approved' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                                        detailTransaction.status === 'rejected' ? 'bg-red-50 text-red-700 border-red-200' :
+                                            'bg-amber-50 text-amber-700 border-amber-200'
+                                    }`}>
+                                    <div className={`w-2 h-2 rounded-full ml-2 ${detailTransaction.status === 'approved' ? 'bg-emerald-500' :
+                                            detailTransaction.status === 'rejected' ? 'bg-red-500' :
+                                                'bg-amber-500'
+                                        }`}></div>
+                                    {detailTransaction.status === 'approved' ? 'معتمد' : detailTransaction.status === 'rejected' ? 'مرفوض' : 'قيد التدقيق'}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Details Grid */}
+                        <div className="px-10 py-8 space-y-5 max-h-[50vh] overflow-y-auto custom-scrollbar">
+                            {/* Date */}
+                            <div className="flex items-center justify-between py-3 border-b border-slate-50">
+                                <div className="flex items-center space-x-3 space-x-reverse">
+                                    <div className="bg-slate-100 p-2.5 rounded-xl"><Clock className="h-4 w-4 text-slate-500" /></div>
+                                    <span className="text-sm font-black text-slate-400">التاريخ والوقت</span>
+                                </div>
+                                <span className="text-sm font-bold text-slate-800">{new Date(detailTransaction.created_at).toLocaleString('ar-MA', { dateStyle: 'long', timeStyle: 'short' })}</span>
+                            </div>
+
+                            {/* Cashbox */}
+                            <div className="flex items-center justify-between py-3 border-b border-slate-50">
+                                <div className="flex items-center space-x-3 space-x-reverse">
+                                    <div className="bg-indigo-50 p-2.5 rounded-xl"><Wallet className="h-4 w-4 text-indigo-500" /></div>
+                                    <span className="text-sm font-black text-slate-400">الصندوق</span>
+                                </div>
+                                <span className="text-sm font-bold text-slate-800">{detailTransaction.cash_box?.name || 'غير محدد'}</span>
+                            </div>
+
+                            {/* Creator */}
+                            <div className="flex items-center justify-between py-3 border-b border-slate-50">
+                                <div className="flex items-center space-x-3 space-x-reverse">
+                                    <div className="bg-blue-50 p-2.5 rounded-xl"><User className="h-4 w-4 text-blue-500" /></div>
+                                    <span className="text-sm font-black text-slate-400">بواسطة</span>
+                                </div>
+                                <span className="text-sm font-bold text-slate-800">{detailTransaction.creator?.name || 'آلي'}</span>
+                            </div>
+
+                            {/* Balance Before/After */}
+                            {(detailTransaction.balance_before != null || detailTransaction.balance_after != null) && (
+                                <div className="grid grid-cols-2 gap-4 py-3 border-b border-slate-50">
+                                    <div className="bg-slate-50 p-4 rounded-2xl text-center border border-slate-100">
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">الرصيد قبل</p>
+                                        <p className="text-lg font-black text-slate-700">{detailTransaction.balance_before ?? '—'} <span className="text-xs text-slate-400">MRU</span></p>
+                                    </div>
+                                    <div className="bg-slate-50 p-4 rounded-2xl text-center border border-slate-100">
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">الرصيد بعد</p>
+                                        <p className="text-lg font-black text-slate-700">{detailTransaction.balance_after ?? '—'} <span className="text-xs text-slate-400">MRU</span></p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Withdrawal Type */}
+                            {detailTransaction.withdrawal_type && (
+                                <div className="flex items-center justify-between py-3 border-b border-slate-50">
+                                    <div className="flex items-center space-x-3 space-x-reverse">
+                                        <div className="bg-purple-50 p-2.5 rounded-xl"><CreditCard className="h-4 w-4 text-purple-500" /></div>
+                                        <span className="text-sm font-black text-slate-400">نوع السحب</span>
+                                    </div>
+                                    <span className="text-sm font-bold text-slate-800">{detailTransaction.withdrawal_type.name}</span>
+                                </div>
+                            )}
+
+                            {/* Account Number */}
+                            {detailTransaction.account_number && (
+                                <div className="flex items-center justify-between py-3 border-b border-slate-50">
+                                    <div className="flex items-center space-x-3 space-x-reverse">
+                                        <div className="bg-cyan-50 p-2.5 rounded-xl"><Hash className="h-4 w-4 text-cyan-500" /></div>
+                                        <span className="text-sm font-black text-slate-400">رقم الحساب</span>
+                                    </div>
+                                    <span className="text-sm font-bold text-slate-800 font-mono tracking-tight">{detailTransaction.account_number}</span>
+                                </div>
+                            )}
+
+                            {/* Phone Number */}
+                            {detailTransaction.phone_number && (
+                                <div className="flex items-center justify-between py-3 border-b border-slate-50">
+                                    <div className="flex items-center space-x-3 space-x-reverse">
+                                        <div className="bg-teal-50 p-2.5 rounded-xl"><Phone className="h-4 w-4 text-teal-500" /></div>
+                                        <span className="text-sm font-black text-slate-400">رقم الهاتف</span>
+                                    </div>
+                                    <span className="text-sm font-bold text-slate-800 font-mono tracking-tight">{detailTransaction.phone_number}</span>
+                                </div>
+                            )}
+
+                            {/* Notes */}
+                            {detailTransaction.notes && (
+                                <div className="py-3 border-b border-slate-50">
+                                    <div className="flex items-center space-x-3 space-x-reverse mb-3">
+                                        <div className="bg-amber-50 p-2.5 rounded-xl"><StickyNote className="h-4 w-4 text-amber-500" /></div>
+                                        <span className="text-sm font-black text-slate-400">ملاحظات</span>
+                                    </div>
+                                    <p className="text-sm font-medium text-slate-700 bg-slate-50 p-4 rounded-2xl border border-slate-100 leading-relaxed">{detailTransaction.notes}</p>
+                                </div>
+                            )}
+
+                            {/* Rejection Reason */}
+                            {detailTransaction.status === 'rejected' && detailTransaction.reason && (
+                                <div className="py-3">
+                                    <div className="flex items-center space-x-3 space-x-reverse mb-3">
+                                        <div className="bg-red-50 p-2.5 rounded-xl"><AlertTriangle className="h-4 w-4 text-red-500" /></div>
+                                        <span className="text-sm font-black text-red-500">سبب الرفض</span>
+                                    </div>
+                                    <p className="text-sm font-bold text-red-700 bg-red-50 p-4 rounded-2xl border border-red-100 leading-relaxed">{detailTransaction.reason}</p>
+                                </div>
+                            )}
+
+                            {/* Approver */}
+                            {detailTransaction.approver && (
+                                <div className="flex items-center justify-between py-3 border-b border-slate-50">
+                                    <div className="flex items-center space-x-3 space-x-reverse">
+                                        <div className="bg-emerald-50 p-2.5 rounded-xl"><Check className="h-4 w-4 text-emerald-500" /></div>
+                                        <span className="text-sm font-black text-slate-400">تمت الموافقة بواسطة</span>
+                                    </div>
+                                    <span className="text-sm font-bold text-slate-800">{detailTransaction.approver.name}</span>
+                                </div>
+                            )}
+
+                            {/* Images Gallery */}
+                            {detailTransaction.media && detailTransaction.media.length > 0 && (
+                                <div className="py-3">
+                                    <div className="flex items-center space-x-3 space-x-reverse mb-4">
+                                        <div className="bg-violet-50 p-2.5 rounded-xl"><ImageIcon className="h-4 w-4 text-violet-500" /></div>
+                                        <span className="text-sm font-black text-slate-400">المرفقات ({detailTransaction.media.length})</span>
+                                    </div>
+                                    <div className="flex gap-4 overflow-x-auto pb-2 custom-scrollbar">
+                                        {detailTransaction.media.map((m: any, idx: number) => (
+                                            <img
+                                                key={idx}
+                                                src={m.image_url}
+                                                alt={`مرفق ${idx + 1}`}
+                                                className="h-32 w-32 object-cover rounded-2xl border-2 border-slate-100 hover:border-indigo-400 cursor-pointer transition-all hover:scale-105 shadow-sm flex-shrink-0"
+                                                onClick={() => { setShowDetailsModal(false); setSelectedImage(m.image_url); }}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Footer */}
+                        <div className="px-10 py-6 bg-slate-50 border-t border-slate-100 flex justify-end">
+                            <button
+                                onClick={() => setShowDetailsModal(false)}
+                                className="bg-slate-200 text-slate-700 px-8 py-3 rounded-2xl font-black text-sm hover:bg-slate-300 transition-all"
+                            >
+                                إغلاق
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
